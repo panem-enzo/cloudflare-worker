@@ -5,7 +5,7 @@ export interface Env {
 export default {
     async fetch(request, env): Promise<Response> {
         // ESP32 Camera Stream URL
-        const esp32_url = "http://<ESP32_IP>/capture"; // Change this to ESP32 IP
+        const esp32_url = "http://172.20.10.10/"; // Change this to ESP32 IP
 
         // Fetch latest frame
         const esp_response = await fetch(esp32_url);
