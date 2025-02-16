@@ -1,4 +1,6 @@
-﻿# cloudflare-worker
+﻿# cloudflare-worker-ai
+
+- Uses an object detection model to distinguish between cars in the footage
 ```
 export interface Env {
 	AI: Ai;
