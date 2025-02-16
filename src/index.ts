@@ -1,23 +1,23 @@
 export interface Env {
-	AI: Ai;
+    AI: Ai;
 }
 
 export default {
-	async fetch(request, env): Promise<Response> {
-		if (request.method !== "POST") {
-			return new Response("Only POST requests are allowed", { status: 405 });
-		}
+    async fetch(request, env): Promise<Response> {
+        // ESP32 Camera Stream URL
+        const esp32_url = "http://<ESP32_IP>/capture"; // Change this to ESP32 IP
 
-		const blob = await request.arrayBuffer();
-		const inputs = {
-			image: [...new Uint8Array(blob)], // Convert to Uint8Array
-		};
+        // Fetch latest frame
+        const esp_response = await fetch(esp32_url);
+        const imageBlob = await esp_response.arrayBuffer();
 
-		const response = await env.AI.run(
-			"@cf/facebook/detr-resnet-50",
-			inputs
-		);
+        // Send image to AI Model
+        const inputs = {
+            image: [...new Uint8Array(imageBlob)],
+        };
 
-		return new Response(JSON.stringify({ response }));
-	},
+        const response = await env.AI.run("@cf/facebook/detr-resnet-50", inputs);
+
+        return new Response(JSON.stringify({ response }));
+    },
 } satisfies ExportedHandler<Env>;
